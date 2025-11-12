@@ -12,7 +12,7 @@ Model name is converted to lowercase for the collection name:
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 
 # Example schemas (replace with your own):
 
@@ -37,6 +37,24 @@ class Product(BaseModel):
     price: float = Field(..., ge=0, description="Price in dollars")
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
+
+# Document management schemas for the scanning/archiving platform
+
+class DocumentCreate(BaseModel):
+    title: str = Field(..., min_length=1, max_length=200, description="Document title")
+    tags: Optional[List[str]] = Field(default_factory=list, description="Optional tags for organization")
+    notes: Optional[str] = Field(None, description="Optional notes or description")
+
+class DocumentOut(BaseModel):
+    id: str
+    title: str
+    tags: List[str] = []
+    notes: Optional[str] = None
+    mime_type: Optional[str] = None
+    size: Optional[int] = None
+    text_preview: Optional[str] = None
+    created_at: Optional[str] = None
+    updated_at: Optional[str] = None
 
 # Add your own schemas here:
 # --------------------------------------------------
